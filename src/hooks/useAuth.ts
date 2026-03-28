@@ -1,7 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '@/lib/api-client';
-import type { LoginRequest, RegisterRequest, UserResponse, TokenResponse } from '@/types/api';
+import type {
+  ChangePasswordRequest,
+  ForgotPasswordRequest,
+  LoginRequest,
+  MessageResponse,
+  RegisterRequest,
+  ResetPasswordRequest,
+  UpdateProfileRequest,
+  UserResponse,
+  TokenResponse,
+} from '@/types/api';
 
 export function useAuth() {
   const queryClient = useQueryClient();
@@ -30,8 +40,6 @@ export function useAuth() {
       const formData = new URLSearchParams();
       formData.append('username', credentials.email);
       formData.append('password', credentials.password);
-
-      // Axios automatically sets Content-Type to application/x-www-form-urlencoded for URLSearchParams
       const response = await apiClient.post<TokenResponse>('/auth/login', formData);
       return response.data;
     },
@@ -57,6 +65,41 @@ export function useAuth() {
     },
   });
 
+  // Forgot password mutation
+  const forgotPasswordMutation = useMutation({
+    mutationFn: async (data: ForgotPasswordRequest) => {
+      const response = await apiClient.post<MessageResponse>('/auth/forgot-password', data);
+      return response.data;
+    },
+  });
+
+  // Reset password mutation
+  const resetPasswordMutation = useMutation({
+    mutationFn: async (data: ResetPasswordRequest) => {
+      const response = await apiClient.post<MessageResponse>('/auth/reset-password', data);
+      return response.data;
+    },
+  });
+
+  // Update profile mutation
+  const updateProfileMutation = useMutation({
+    mutationFn: async (data: UpdateProfileRequest) => {
+      const response = await apiClient.put<UserResponse>('/auth/me', data);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
+    },
+  });
+
+  // Change password mutation
+  const changePasswordMutation = useMutation({
+    mutationFn: async (data: ChangePasswordRequest) => {
+      const response = await apiClient.post<MessageResponse>('/auth/change-password', data);
+      return response.data;
+    },
+  });
+
   // Logout function
   const logout = () => {
     localStorage.removeItem('access_token');
@@ -76,6 +119,15 @@ export function useAuth() {
     register: registerMutation.mutate,
     registerError: registerMutation.error,
     isRegistering: registerMutation.isPending,
+    forgotPassword: forgotPasswordMutation.mutateAsync,
+    isSendingReset: forgotPasswordMutation.isPending,
+    forgotPasswordSuccess: forgotPasswordMutation.isSuccess,
+    resetPassword: resetPasswordMutation.mutateAsync,
+    isResettingPassword: resetPasswordMutation.isPending,
+    updateProfile: updateProfileMutation.mutateAsync,
+    isUpdatingProfile: updateProfileMutation.isPending,
+    changePassword: changePasswordMutation.mutateAsync,
+    isChangingPassword: changePasswordMutation.isPending,
     logout,
   };
 }

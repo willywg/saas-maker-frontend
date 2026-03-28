@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,6 +36,8 @@ type LoginFormData = z.infer<typeof loginSchema>;
 export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const { login, isLoggingIn, loginError } = useAuth();
+  const location = useLocation();
+  const passwordReset = (location.state as { passwordReset?: boolean })?.passwordReset;
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -63,6 +65,11 @@ export function LoginPage() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
+            {passwordReset && (
+              <div className="rounded-md bg-green-50 text-green-700 border border-green-200 p-3 text-sm">
+                Contraseña restablecida correctamente. Inicia sesión con tu nueva contraseña.
+              </div>
+            )}
             {errorMessage && (
               <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
                 {errorMessage}
@@ -121,6 +128,9 @@ export function LoginPage() {
             <Button type="submit" className="w-full" disabled={isLoggingIn}>
               {isLoggingIn ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </Button>
+            <Link to="/forgot-password" className="text-sm text-muted-foreground hover:text-primary">
+              ¿Olvidaste tu contraseña?
+            </Link>
             <p className="text-sm text-muted-foreground">
               ¿No tienes una cuenta?{' '}
               <Link to="/register" className="text-primary hover:underline">

@@ -1,4 +1,5 @@
-import { Menu, LogOut } from 'lucide-react';
+import { Menu, LogOut, UserCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -23,6 +24,7 @@ interface HeaderProps {
 
 export function Header({ onMenuClick }: HeaderProps) {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   // Get initials from full_name, or first letter of email as fallback
   const getInitials = () => {
@@ -69,6 +71,11 @@ export function Header({ onMenuClick }: HeaderProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => navigate('/account')} className="cursor-pointer">
+            <UserCircle className="mr-2 h-4 w-4" />
+            Mi Perfil
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={logout} className="text-destructive cursor-pointer">
             <LogOut className="mr-2 h-4 w-4" />

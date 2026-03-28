@@ -109,3 +109,31 @@ export interface AcceptInviteRequest {
   full_name: string;
   password: string;
 }
+
+// Password reset
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  new_password: string;
+}
+
+export interface ValidateResetTokenResponse {
+  email: string;
+}
+
+// Profile management
+export interface UpdateProfileRequest {
+  full_name?: string;
+}
+
+export interface ChangePasswordRequest {
+  current_password: string;
+  new_password: string;
+}
+
+export interface MessageResponse {
+  message: string;
+}
