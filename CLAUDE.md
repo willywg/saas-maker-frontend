@@ -9,7 +9,12 @@ npm run dev      # Start dev server on localhost:5190
 npm run build    # Type check + production build
 npm run lint     # Run ESLint
 npm run preview  # Preview production build
+npm run typecheck # Type check only
+npm run audit    # npm audit (fails on high/critical)
+npm run upgrade  # Bump all deps with npm-check-updates, install, audit
 ```
+
+Requires Node 24 (see `.nvmrc`, `nvm use`).
 
 ## Environment Setup
 
@@ -23,7 +28,7 @@ VITE_API_BASE_URL=http://localhost:8090  # Backend API URL
 ### Tech Stack
 - React 19 + TypeScript + Vite
 - TanStack React Query for server state
-- React Router 7 for routing
+- React Router 8 (`react-router`, sin `react-router-dom`) for routing
 - React Hook Form + Zod for forms
 - Shadcn/ui (Radix) + Tailwind CSS 4 for UI
 - Axios with interceptors for API calls
