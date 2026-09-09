@@ -48,7 +48,15 @@ const passwordSchema = z
 type PasswordFormData = z.infer<typeof passwordSchema>;
 
 export function AccountPage() {
-  const { user, updateProfile, isUpdatingProfile, changePassword, isChangingPassword } = useAuth();
+  const {
+    user,
+    updateProfile,
+    isUpdatingProfile,
+    changePassword,
+    isChangingPassword,
+    logoutAll,
+    isLoggingOutAll,
+  } = useAuth();
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -282,6 +290,26 @@ export function AccountPage() {
               </Button>
             </form>
           </Form>
+        </CardContent>
+      </Card>
+
+      {/* Sessions Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Sesiones</CardTitle>
+          <CardDescription>
+            Cierra la sesión en todos los dispositivos donde hayas iniciado sesión, incluido este.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button
+            variant="outline"
+            onClick={() => logoutAll().catch(() => undefined)}
+            disabled={isLoggingOutAll}
+          >
+            {isLoggingOutAll && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Cerrar sesión en todos los dispositivos
+          </Button>
         </CardContent>
       </Card>
     </div>

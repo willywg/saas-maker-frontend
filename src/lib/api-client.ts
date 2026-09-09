@@ -91,8 +91,12 @@ apiClient.interceptors.response.use(
         refresh_token: refreshToken,
       });
 
-      const { access_token } = response.data;
+      // Refresh tokens rotate: the backend revokes the one we sent and returns a new one
+      const { access_token, refresh_token: new_refresh_token } = response.data;
       localStorage.setItem('access_token', access_token);
+      if (new_refresh_token) {
+        localStorage.setItem('refresh_token', new_refresh_token);
+      }
 
       // Process queue of pending requests
       processQueue(null, access_token);

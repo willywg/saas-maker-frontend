@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Outlet } from 'react-router';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
+import { OrganizationSwitcher } from './OrganizationSwitcher';
+import { EmailVerificationBanner } from './EmailVerificationBanner';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 
 export function AppLayout() {
@@ -14,6 +16,9 @@ export function AppLayout() {
         <div className="flex h-14 items-center border-b px-4">
           <h1 className="text-lg font-semibold text-primary">SaaS Template</h1>
         </div>
+        <div className="border-b px-1 py-2">
+          <OrganizationSwitcher />
+        </div>
         <Sidebar />
       </aside>
 
@@ -23,6 +28,9 @@ export function AppLayout() {
           <div className="flex h-14 items-center border-b px-4">
             <h1 className="text-lg font-semibold text-primary">SaaS Template</h1>
           </div>
+          <div className="border-b px-1 py-2">
+            <OrganizationSwitcher />
+          </div>
           <Sidebar onNavigate={() => setSidebarOpen(false)} />
         </SheetContent>
       </Sheet>
@@ -30,6 +38,7 @@ export function AppLayout() {
       {/* Main Content */}
       <div className="flex flex-1 flex-col">
         <Header onMenuClick={() => setSidebarOpen(true)} />
+        <EmailVerificationBanner />
         <main className="flex-1 overflow-auto bg-muted/30 p-4 lg:p-6">
           <Outlet />
         </main>

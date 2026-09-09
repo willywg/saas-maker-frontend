@@ -42,6 +42,7 @@ export interface UserResponse {
   id: string;
   email: string;
   full_name: string | null;
+  email_verified: boolean;
   organization_id: string;
   organization_name: string;
   role: string;
@@ -132,6 +133,32 @@ export interface UpdateProfileRequest {
 export interface ChangePasswordRequest {
   current_password: string;
   new_password: string;
+  // Caller's refresh token: every OTHER session gets revoked
+  refresh_token?: string | null;
+}
+
+// Sessions
+export interface LogoutRequest {
+  refresh_token: string;
+}
+
+// Email verification
+export interface VerifyEmailRequest {
+  token: string;
+}
+
+// Multi-organization
+export interface UserOrganizationItem {
+  id: string;
+  name: string;
+  slug: string;
+  role: string;
+  is_current: boolean;
+}
+
+export interface SwitchOrganizationRequest {
+  organization_id: string;
+  refresh_token?: string | null;
 }
 
 export interface MessageResponse {

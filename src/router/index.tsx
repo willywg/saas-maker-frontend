@@ -6,6 +6,7 @@ import { LoginPage } from '@/pages/LoginPage';
 import { RegisterPage } from '@/pages/RegisterPage';
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage';
+import { VerifyEmailPage } from '@/pages/VerifyEmailPage';
 import { AcceptInvitePage } from '@/pages/AcceptInvitePage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { OrganizationPage } from '@/pages/OrganizationPage';
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
       { path: '/register', element: <RegisterPage /> },
       { path: '/forgot-password', element: <ForgotPasswordPage /> },
       { path: '/reset-password/:token', element: <ResetPasswordPage /> },
+      { path: '/verify-email/:token', element: <VerifyEmailPage /> },
     ],
   },
   // Accept invite page (public, standalone layout)

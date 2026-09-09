@@ -8,6 +8,7 @@ import type {
   MessageResponse,
   RegisterRequest,
   ResetPasswordRequest,
+  VerifyEmailRequest,
   UpdateProfileRequest,
   UserResponse,
   TokenResponse,
@@ -92,21 +93,59 @@ export function useAuth() {
     },
   });
 
-  // Change password mutation
+  // Change password mutation (keeps this session, revokes the others)
   const changePasswordMutation = useMutation({
     mutationFn: async (data: ChangePasswordRequest) => {
-      const response = await apiClient.post<MessageResponse>('/auth/change-password', data);
+      const response = await apiClient.post<MessageResponse>('/auth/change-password', {
+        ...data,
+        refresh_token: localStorage.getItem('refresh_token'),
+      });
       return response.data;
     },
   });
 
-  // Logout function
-  const logout = () => {
+  // Email verification
+  const verifyEmailMutation = useMutation({
+    mutationFn: async (data: VerifyEmailRequest) => {
+      const response = await apiClient.post<MessageResponse>('/auth/verify-email', data);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
+    },
+  });
+
+  const resendVerificationMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiClient.post<MessageResponse>('/auth/resend-verification');
+      return response.data;
+    },
+  });
+
+  // Logout: revoke the refresh token server-side (best effort), then clear local state
+  const clearSession = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     queryClient.clear();
     navigate('/login');
   };
+
+  const logout = () => {
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (refreshToken) {
+      apiClient.post('/auth/logout', { refresh_token: refreshToken }).catch(() => undefined);
+    }
+    clearSession();
+  };
+
+  // Logout everywhere: revoke every session of this user, then clear local state
+  const logoutAllMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiClient.post<MessageResponse>('/auth/logout-all');
+      return response.data;
+    },
+    onSuccess: clearSession,
+  });
 
   return {
     user,
@@ -128,6 +167,12 @@ export function useAuth() {
     isUpdatingProfile: updateProfileMutation.isPending,
     changePassword: changePasswordMutation.mutateAsync,
     isChangingPassword: changePasswordMutation.isPending,
+    verifyEmail: verifyEmailMutation.mutateAsync,
+    isVerifyingEmail: verifyEmailMutation.isPending,
+    resendVerification: resendVerificationMutation.mutateAsync,
+    isResendingVerification: resendVerificationMutation.isPending,
     logout,
+    logoutAll: logoutAllMutation.mutateAsync,
+    isLoggingOutAll: logoutAllMutation.isPending,
   };
 }

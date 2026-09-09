@@ -55,7 +55,14 @@ src/
 
 ### Authentication Flow
 - Tokens stored in localStorage (`access_token`, `refresh_token`)
-- `lib/api-client.ts` handles automatic token injection and 401 refresh
+- `lib/api-client.ts` handles automatic token injection and 401 refresh. Refresh tokens
+  rotate: always store the `refresh_token` returned by `/auth/refresh`
+- Logout revokes the refresh token server-side (`POST /auth/logout`); "cerrar sesión en
+  todos los dispositivos" lives in `AccountPage` (`POST /auth/logout-all`)
+- Multi-org: `hooks/useUserOrganizations.ts` lists memberships and switches the session
+  (`OrganizationSwitcher` in the sidebar). Switching clears the React Query cache
+- Email verification: `EmailVerificationBanner` shows until `user.email_verified`;
+  `/verify-email/:token` confirms the link
 - Login endpoint expects form-data with `username` field (not `email`)
 - Role hierarchy: owner (3) > admin (2) > member (1)
 
@@ -81,8 +88,10 @@ src/
 ### Routes
 - `/login`, `/register` - Public auth pages
 - `/invite/:token` - Public invite acceptance
+- `/forgot-password`, `/reset-password/:token`, `/verify-email/:token` - Public token flows
 - `/dashboard` - Main dashboard (authenticated)
 - `/organization` - Team management (admin+ only)
+- `/account` - Profile, password, sessions
 
 ### Adding New Features
 1. Create page in `src/pages/`
