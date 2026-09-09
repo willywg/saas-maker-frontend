@@ -10,6 +10,7 @@ npm run build    # Type check + production build
 npm run lint     # Run ESLint
 npm run preview  # Preview production build
 npm run typecheck # Type check only
+npm test         # Vitest + Testing Library (src/**/*.test.tsx)
 npm run audit    # npm audit (fails on high/critical)
 npm run upgrade  # Bump all deps with npm-check-updates, install, audit
 ```
@@ -22,6 +23,10 @@ Copy `.env.example` to `.env` and configure:
 ```
 VITE_API_BASE_URL=http://localhost:8090  # Backend API URL
 ```
+
+## Design
+
+Follow `../DESIGN.md` (root of the monorepo) for colors, type, spacing and component rules. Palette lives in `src/index.css`; brand color is `--brand-hue`. Never hard-code colors in components.
 
 ## Architecture
 
@@ -85,3 +90,4 @@ src/
 3. Create hooks in `src/hooks/` for API calls
 4. Add feature components in `src/components/features/<feature>/`
 5. Update Sidebar navigation if needed
+6. Add a test next to the component/page (`*.test.tsx`, use `src/test/render.tsx`)
