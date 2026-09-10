@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router';
-import { LayoutDashboard, Building2 } from 'lucide-react';
+import { LayoutDashboard, Building2, FolderKanban } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import type { UserRole } from '@/types/api';
@@ -13,6 +13,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Panel Principal', path: '/dashboard', icon: LayoutDashboard },
+  { label: 'Proyectos', path: '/projects', icon: FolderKanban },
   // generator:nav
   { label: 'Organización', path: '/organization', icon: Building2, minRole: 'admin' },
 ];

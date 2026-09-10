@@ -165,4 +165,40 @@ export interface MessageResponse {
   message: string;
 }
 
+// --- Projects (reference tenant-scoped resource) ---
+
+export type ProjectStatus = 'draft' | 'active' | 'done';
+
+export interface ProjectResponse {
+  id: string;
+  name: string;
+  description: string | null;
+  status: ProjectStatus;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProjectListResponse {
+  items: ProjectResponse[];
+  total: number;
+  page: number;
+  page_size: number;
+}
+
+export interface ProjectListParams {
+  q?: string;
+  status?: ProjectStatus;
+  page?: number;
+  page_size?: number;
+}
+
+export interface ProjectCreate {
+  name: string;
+  description?: string | null;
+  status?: ProjectStatus;
+}
+
+export type ProjectUpdate = Partial<ProjectCreate>;
+
 // generator:types

@@ -45,9 +45,9 @@ src/
 │   ├── ui/           # Shadcn/ui primitives
 │   ├── layout/       # AppLayout, AuthLayout, Sidebar, Header
 │   ├── auth/         # ProtectedRoute
-│   └── features/     # Feature-specific components (organization/)
+│   └── features/     # Feature-specific components (organization/, projects/)
 ├── pages/            # Route page components
-├── hooks/            # useAuth, useOrganization, useMembers
+├── hooks/            # useAuth, useOrganization, useMembers, useProjects, useDebounce
 ├── lib/              # api-client.ts, utils.ts
 ├── router/           # React Router configuration
 └── types/            # TypeScript interfaces (api.ts)
@@ -69,7 +69,7 @@ src/
 ### Key Patterns
 
 **React Query Usage:**
-- Query keys: `['auth', 'me']`, `['organization']`, `['members']`
+- Query keys: `['auth', 'me']`, `['organization']`, `['members']`, `['projects', params]`
 - 5-minute stale time configured globally
 - Mutations auto-invalidate related queries
 
@@ -91,9 +91,15 @@ src/
 - `/forgot-password`, `/reset-password/:token`, `/verify-email/:token` - Public token flows
 - `/dashboard` - Main dashboard (authenticated)
 - `/organization` - Team management (admin+ only)
+- `/projects` - Reference tenant-scoped CRUD (any member reads; admin+ writes)
 - `/account` - Profile, password, sessions
 
 ### Adding New Features
+Copy the `projects` module: `types/api.ts` (Project types), `hooks/useProjects.ts`,
+`components/features/projects/` (list with the four states, form dialog, delete dialog,
+status badge), `pages/ProjectsPage.tsx` and its test. Insert at the `// generator:*` anchors
+in `router/index.tsx`, `components/layout/Sidebar.tsx` and `types/api.ts`. Copy in Spanish,
+sentence case, following `../DESIGN.md`.
 1. Create page in `src/pages/`
 2. Add route in `src/router/index.tsx`
 3. Create hooks in `src/hooks/` for API calls
