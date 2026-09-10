@@ -11,6 +11,7 @@ import { AcceptInvitePage } from '@/pages/AcceptInvitePage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { OrganizationPage } from '@/pages/OrganizationPage';
 import { AccountPage } from '@/pages/AccountPage';
+// generator:route-imports
 
 export const router = createBrowserRouter([
   // Public routes (auth pages)
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
       { path: '/', element: <Navigate to="/dashboard" replace /> },
       { path: '/dashboard', element: <DashboardPage /> },
       { path: '/account', element: <AccountPage /> },
+      // generator:routes
       {
         path: '/organization',
         element: (

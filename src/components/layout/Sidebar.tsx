@@ -13,6 +13,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Panel Principal', path: '/dashboard', icon: LayoutDashboard },
+  // generator:nav
   { label: 'Organización', path: '/organization', icon: Building2, minRole: 'admin' },
 ];
 

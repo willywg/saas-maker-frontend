@@ -164,3 +164,5 @@ export interface SwitchOrganizationRequest {
 export interface MessageResponse {
   message: string;
 }
+
+// generator:types
